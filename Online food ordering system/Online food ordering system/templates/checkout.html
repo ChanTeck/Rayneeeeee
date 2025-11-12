@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Foodly | Checkout</title>
+<style>
+/* Base */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: "Poppins", sans-serif; background: #f5f5f5; color: #333; }
+
+/* Navigation */
+nav {
+  background: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 40px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+nav h1 { color: #009688; font-weight: 700; }
+nav ul { display: flex; gap: 25px; list-style: none; }
+nav a { text-decoration: none; color: #333; font-weight: 600; transition: color 0.3s; }
+nav a:hover { color: #00c853; }
+.dropdown { position: relative; }
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background: #fff;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+  border-radius: 10px;
+  min-width: 160px;
+  z-index: 100;
+}
+.dropdown-content a { display: block; padding: 10px 15px; color: #333; text-decoration: none; }
+.dropdown-content a:hover { background: #00c853; color: #fff; }
+.dropdown:hover .dropdown-content { display: block; }
+
+/* Hero */
+.hero {
+  background: linear-gradient(to right, #00c853, #009688);
+  color: white;
+  text-align: center;
+  padding: 60px 20px;
+}
+.hero h2 { font-size: 2.5em; margin-bottom: 10px; }
+.hero p { font-size: 1.2em; }
+
+/* Checkout Section */
+.checkout-section {
+  padding: 30px 40px 60px 40px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+.checkout-section h2 { color: #009688; margin-bottom: 20px; text-align: center; }
+.cart-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  background: white;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+.cart-item span { display: block; }
+#totalDisplay {
+  font-weight: 600;
+  margin-top: 15px;
+  text-align: right;
+  font-size: 18px;
+}
+#voucherInfo {
+  margin-top: 10px;
+  font-weight: 600;
+  color: #009688;
+  text-align: right;
+}
+#placeOrderBtn {
+  display: block;
+  width: 100%;
+  margin-top: 20px;
+  padding: 15px;
+  background: #009688;
+  color: #fff;
+  border: none;
+  border-radius: 25px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+#placeOrderBtn:hover { background: #00c853; }
+
+/* Footer */
+footer {
+  background: white;
+  text-align: center;
+  padding: 20px;
+  margin-top: 50px;
+  box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+}
+</style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav>
+  <h1>🍔 Foodly</h1>
+  <ul>
+    <li><a href="index.html">Home</a></li>
+    <li><a href="restaurants.html">Restaurants</a></li>
+    <li><a href="vouchers.html">Vouchers</a></li>
+    <li><a href="contact.html">Contact</a></li>
+    <li class="dropdown">
+      <a href="#">Account ▾</a>
+      <div class="dropdown-content">
+        <a href="account.html">Profile</a>
+        <a href="order-history.html">Order History</a>
+        <a href="#" id="logoutBtn">Logout</a>
+      </div>
+    </li>
+  </ul>
+</nav>
+
+<!-- Hero Section -->
+<section class="hero">
+  <h2>Checkout</h2>
+  <p>Review your order and place it securely.</p>
+</section>
+
+<!-- Checkout Section -->
+<section class="checkout-section">
+  <h2>Your Cart</h2>
+  <div id="checkoutCart"></div>
+  <div id="voucherInfo"></div>
+  <div id="totalDisplay"></div>
+  <button id="placeOrderBtn">Place Order</button>
+</section>
+
+<!-- Footer -->
+<footer>© 2025 GrabFood Cloud — Powered by Netlify</footer>
+
+<script>
+// Logout
+document.getElementById('logoutBtn').addEventListener('click', function(e){
+  e.preventDefault();
+  alert("You have been logged out!");
+  window.location.href = "index.html";
+});
+
+// Sample cart from localStorage (simulate previous page)
+let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+// Get applied voucher from localStorage
+let appliedVoucher = localStorage.getItem('appliedVoucher') || null;
+
+// Function to display cart
+function displayCart(){
+  const cartContainer = document.getElementById('checkoutCart');
+  const totalDisplay = document.getElementById('totalDisplay');
+  const voucherInfo = document.getElementById('voucherInfo');
+  cartContainer.innerHTML = '';
+
+  let total = 0;
+  cart.forEach(item => {
+    total += item.price * item.qty;
+    const div = document.createElement('div');
+    div.classList.add('cart-item');
+    div.innerHTML = `<span>${item.name} x${item.qty}</span><span>RM${(item.price*item.qty).toFixed(2)}</span>`;
+    cartContainer.appendChild(div);
+  });
+
+  let discount = 0;
+  if(appliedVoucher){
+    voucherInfo.innerText = "Applied Voucher: " + appliedVoucher;
+    // Simple discount rules
+    if(appliedVoucher === '10% OFF' && total >= 50){
+      discount = total * 0.10;
+    } else if(appliedVoucher === 'Free Drink' && total >= 30){
+      discount = 5; // example value for free drink
+    } else if(appliedVoucher === 'RM5 OFF' && total >= 20){
+      discount = 5;
+    } else if(appliedVoucher === '15% OFF Pizza'){
+      // Only discount pizza items
+      cart.forEach(item=>{
+        if(item.name.toLowerCase().includes('pizza')){
+          discount += item.price * item.qty * 0.15;
+        }
+      });
+    }
+  } else {
+    voucherInfo.innerText = '';
+  }
+
+  const finalTotal = total - discount;
+  totalDisplay.innerText = `Total: RM${finalTotal.toFixed(2)}`;
+}
+
+displayCart();
+
+// Place Order
+document.getElementById('placeOrderBtn').addEventListener('click', ()=>{
+  if(cart.length === 0){
+    alert("Your cart is empty!");
+    return;
+  }
+  alert("Thank you for your order!\nTotal: RM" + (cart.reduce((sum,item)=>sum+item.price*item.qty,0) - (appliedVoucher ? discountApplied() : 0)).toFixed(2));
+  cart = [];
+  localStorage.removeItem('cart');
+  localStorage.removeItem('appliedVoucher');
+  window.location.href = "index.html";
+});
+
+// Calculate discount for final alert
+function discountApplied(){
+  let total = cart.reduce((sum,item)=>sum+item.price*item.qty,0);
+  let discount = 0;
+  if(appliedVoucher){
+    if(appliedVoucher === '10% OFF' && total >= 50){
+      discount = total * 0.10;
+    } else if(appliedVoucher === 'Free Drink' && total >= 30){
+      discount = 5;
+    } else if(appliedVoucher === 'RM5 OFF' && total >= 20){
+      discount = 5;
+    } else if(appliedVoucher === '15% OFF Pizza'){
+      cart.forEach(item=>{
+        if(item.name.toLowerCase().includes('pizza')){
+          discount += item.price * item.qty * 0.15;
+        }
+      });
+    }
+  }
+  return discount;
+}
+</script>
+
+</body>
+</html>

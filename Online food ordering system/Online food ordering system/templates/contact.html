@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact | Foodly</title>
+<style>
+body { margin: 0; font-family: "Poppins", sans-serif; background: #f7f9fa; }
+nav { background: #fff; display: flex; justify-content: space-between; align-items: center; padding: 15px 40px; box-shadow: 0 3px 10px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 10; }
+nav h1 { color: #009688; }
+nav ul { list-style: none; display: flex; gap: 25px; margin: 0; padding: 0; }
+nav a { text-decoration: none; color: #333; font-weight: 600; }
+nav a:hover { color: #00c853; }
+
+header { text-align: center; background: linear-gradient(to right, #00c853, #009688); color: white; padding: 60px 20px; }
+
+/* Dropdown */
+.dropdown { position: relative; }
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background: #fff;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+  border-radius: 10px;
+  min-width: 160px;
+  z-index: 100;
+}
+.dropdown-content a {
+  display: block;
+  padding: 10px 15px;
+  color: #333;
+  text-decoration: none;
+}
+.dropdown-content a:hover { background: #00c853; color: #fff; }
+.dropdown:hover .dropdown-content { display: block; }
+
+form {
+  background: white;
+  max-width: 500px;
+  margin: 40px auto;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  padding: 30px;
+}
+
+label { display: block; margin-top: 15px; font-weight: 600; }
+input, textarea {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  margin-top: 5px;
+}
+button {
+  background: #00bfa5;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 10px;
+  width: 100%;
+  margin-top: 20px;
+  cursor: pointer;
+}
+button:hover { background: #009688; }
+
+footer { text-align: center; background: white; padding: 20px; margin-top: 40px; box-shadow: 0 -2px 10px rgba(0,0,0,0.05); }
+</style>
+</head>
+<body>
+<nav>
+  <h1>🍔 Foodly</h1>
+  <ul>
+    <li><a href="index.html">Home</a></li>
+    <li><a href="restaurants.html">Restaurants</a></li>
+    <li><a href="vouchers.html">Vouchers</a></li>
+    <li><a href="contact.html">Contact</a></li>
+    <li class="dropdown">
+      <a href="#">Account ▾</a>
+      <div class="dropdown-content">
+        <a href="account.html">Profile</a>
+        <a href="order-history.html">Order History</a>
+        <a href="#" id="logoutBtn">Logout</a>
+      </div>
+    </li>
+  </ul>
+</nav>
+
+<header>
+  <h2>📞 Contact Us</h2>
+  <p>We’re here to help! Send us your questions or feedback.</p>
+</header>
+
+<form>
+  <label>Name</label>
+  <input type="text" placeholder="Your name" required>
+
+  <label>Email</label>
+  <input type="email" placeholder="Your email" required>
+
+  <label>Message</label>
+  <textarea rows="5" placeholder="Your message" required></textarea>
+
+  <button type="submit">Send Message</button>
+</form>
+
+<footer>© 2025 GrabFood Cloud — Powered by Netlify</footer>
+</body>
+</html>

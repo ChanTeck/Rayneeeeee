@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Foodly — Admin</title>
+<style>
+*{box-sizing:border-box}body{font-family:Poppins,Arial,sans-serif;margin:0;background:#fafafa}
+.navbar{display:flex;justify-content:space-between;align-items:center;padding:12px 18px;background:#fff;box-shadow:0 2px 8px rgba(0,0,0,0.06)}
+.container{max-width:1100px;margin:18px auto;padding:0 16px}
+.header{display:flex;justify-content:space-between;align-items:center}
+.header h1{margin:0;color:#0078ff}
+.btn{background:#00bfa5;color:#fff;padding:8px 12px;border-radius:10px;text-decoration:none}
+.table{width:100%;border-collapse:collapse;margin-top:16px}
+.table th,.table td{padding:10px;border-bottom:1px solid #eee;text-align:left}
+.smallimg{width:70px;height:50px;object-fit:cover;border-radius:6px}
+.empty{padding:20px;text-align:center;color:#777;background:#fff;border-radius:10px}
+</style>
+</head>
+<body>
+<nav class="navbar"><a class="logo" href="index.html">🍽️ Foodly</a><div></div></nav>
+
+<div class="container">
+  <div class="header">
+    <h1>Admin Dashboard</h1>
+    <div>
+      <a class="btn" href="admin_add_item.html">＋ Add Item</a>
+      <a class="btn" href="restaurants.html" style="margin-left:8px">View Site</a>
+    </div>
+  </div>
+
+  <div id="content"></div>
+</div>
+
+<script>
+function getMenus(){ return JSON.parse(localStorage.getItem('restaurantsMenus')||'{}'); }
+function getRestaurants(){ return JSON.parse(localStorage.getItem('restaurantsData')||'{}'); }
+function renderAdmin(){
+  const menus = getMenus(); const restaurants = getRestaurants();
+  let rows = [];
+  for(const rid in menus){
+    menus[rid].forEach(item=>{
+      rows.push({...item, restaurant: (restaurants[rid]&&restaurants[rid].name) || rid});
+    });
+  }
+  const wrap = document.getElementById('content');
+  if(rows.length===0){ wrap.innerHTML = '<div class="empty">No items yet. Add some from Add Item.</div>'; return; }
+  let html = `<table class="table"><thead><tr><th>Image</th><th>Name</th><th>Restaurant</th><th>Price (RM)</th><th>Actions</th></tr></thead><tbody>`;
+  rows.forEach((r,idx)=>{
+    html += `<tr>
+      <td><img class="smallimg" src="${r.image}"></td>
+      <td>${r.name}</td>
+      <td>${r.restaurant}</td>
+      <td>${r.price.toFixed(2)}</td>
+      <td><button onclick="deleteItem(${idx})" style="background:#d9534f;color:#fff;padding:6px 8px;border-radius:6px;border:none;cursor:pointer">Delete</button></td>
+    </tr>`;
+  });
+  html += `</tbody></table>`;
+  wrap.innerHTML = html;
+  // store a flat list in window for delete mapping
+  window._adminFlat = rows;
+}
+function deleteItem(flatIndex){
+  if(!confirm('Delete this item?'))return;
+  const menus = getMenus();
+  // rebuild flat list and find item to delete from original
+  const flat = [];
+  for(const rid in menus){ menus[rid].forEach(it=>flat.push({rid, id:it.id, name:it.name})); }
+  const to = flat[flatIndex];
+  if(to){
+    const list = menus[to.rid].filter(i=>i.id !== to.id);
+    menus[to.rid] = list;
+    localStorage.setItem('restaurantsMenus', JSON.stringify(menus));
+    renderAdmin();
+  }
+}
+renderAdmin();
+</script>
+</body>
+</html>

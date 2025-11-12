@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Your Cart | GrabFood Cloud</title>
+<style>
+body { margin: 0; font-family: "Poppins", sans-serif; background: #f7f9fa; }
+nav { background: #fff; display: flex; justify-content: space-between; align-items: center; padding: 15px 40px; box-shadow: 0 3px 10px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 10; }
+nav h1 { color: #009688; }
+nav ul { list-style: none; display: flex; gap: 25px; margin: 0; padding: 0; }
+nav a { text-decoration: none; color: #333; font-weight: 600; }
+nav a:hover { color: #00c853; }
+
+header { text-align: center; background: linear-gradient(to right, #00c853, #009688); color: white; padding: 50px 20px; }
+.cart-container { width: 85%; margin: 40px auto; background: white; border-radius: 15px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); padding: 25px; }
+
+.dropdown { position: relative; }
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background: #fff;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+  border-radius: 10px;
+  min-width: 160px;
+  z-index: 100;
+}
+.dropdown-content a {
+  display: block;
+  padding: 10px 15px;
+  color: #333;
+  text-decoration: none;
+}
+.dropdown-content a:hover { background: #00c853; color: #fff; }
+.dropdown:hover .dropdown-content { display: block; }
+
+table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+th, td { padding: 15px; border-bottom: 1px solid #eee; text-align: center; }
+th { background: #00bfa5; color: white; }
+
+button {
+  background: #00bfa5;
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+button:hover { background: #009688; }
+
+.total {
+  text-align: right;
+  font-size: 20px;
+  font-weight: 600;
+  margin-top: 10px;
+}
+
+footer { text-align: center; padding: 20px; background: white; box-shadow: 0 -2px 10px rgba(0,0,0,0.05); margin-top: 40px; }
+</style>
+</head>
+<body>
+
+<nav>
+  <h1>🍔 Foodly</h1>
+  <ul>
+    <li><a href="index.html">Home</a></li>
+    <li><a href="restaurants.html">Restaurants</a></li>
+    <li><a href="vouchers.html">Vouchers</a></li>
+    <li><a href="contact.html">Contact</a></li>
+    <li class="dropdown">
+      <a href="#">Account ▾</a>
+      <div class="dropdown-content">
+        <a href="account.html">Profile</a>
+        <a href="order-history.html">Order History</a>
+        <a href="#" id="logoutBtn">Logout</a>
+      </div>
+    </li>
+  </ul>
+</nav>
+
+<header>
+  <h2>🛒 Your Shopping Cart</h2>
+  <p>Review your selected food items below</p>
+</header>
+
+<div class="cart-container">
+  <table id="cartTable">
+    <thead>
+      <tr><th>Item</th><th>Price (RM)</th><th>Action</th></tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <div class="total" id="totalAmount">Total: RM 0.00</div>
+  <button onclick="checkout()">Proceed to Checkout ➡️</button>
+</div>
+
+<footer>© 2025 GrabFood Cloud — Powered by Netlify</footer>
+
+<script>
+function loadCart() {
+  const cart = JSON.parse(localStorage.getItem('cart')) || [];
+  const tbody = document.querySelector('#cartTable tbody');
+  tbody.innerHTML = '';
+  let total = 0;
+
+  cart.forEach((item, i) => {
+    total += item.price;
+    const row = `
+      <tr>
+        <td>${item.name}</td>
+        <td>RM ${item.price.toFixed(2)}</td>
+        <td><button onclick="removeItem(${i})">Remove</button></td>
+      </tr>
+    `;
+    tbody.innerHTML += row;
+  });
+  document.getElementById('totalAmount').innerText = "Total: RM " + total.toFixed(2);
+}
+
+function removeItem(index) {
+  let cart = JSON.parse(localStorage.getItem('cart')) || [];
+  cart.splice(index, 1);
+  localStorage.setItem('cart', JSON.stringify(cart));
+  loadCart();
+}
+
+function checkout() {
+  window.location.href = "checkout.html";
+}
+
+window.onload = loadCart;
+</script>
+</body>
+</html>

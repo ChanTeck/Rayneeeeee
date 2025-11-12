@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Account | Foodly</title>
+<style>
+/* Reset & base styles */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: "Poppins", sans-serif;
+  background: #f7f9fa;
+  color: #333;
+}
+
+/* Navigation */
+nav {
+  background: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 40px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+nav h1 { color: #009688; }
+nav ul { display: flex; gap: 25px; list-style: none; }
+nav a {
+  text-decoration: none;
+  color: #333;
+  font-weight: 600;
+  transition: color 0.3s;
+}
+nav a:hover { color: #00c853; }
+
+/* Header */
+header {
+  text-align: center;
+  background: linear-gradient(to right, #00c853, #009688);
+  color: white;
+  padding: 60px 20px;
+}
+
+/* Dropdown */
+.dropdown { position: relative; }
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background: #fff;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+  border-radius: 10px;
+  min-width: 160px;
+  z-index: 100;
+}
+.dropdown-content a {
+  display: block;
+  padding: 10px 15px;
+  color: #333;
+  text-decoration: none;
+}
+.dropdown-content a:hover { background: #00c853; color: #fff; }
+.dropdown:hover .dropdown-content { display: block; }
+
+/* Main container */
+.main-container {
+  max-width: 400px;
+  margin: 40px auto;
+  padding: 30px;
+  background: #fff;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+.main-container h3 { color: #009688; margin-bottom: 20px; }
+
+input {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 15px;
+}
+
+button {
+  background: #00bfa5;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 10px;
+  width: 100%;
+  margin-top: 20px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+button:hover { background: #009688; }
+
+/* Footer */
+footer {
+  text-align: center;
+  background: white;
+  padding: 20px;
+  margin-top: 40px;
+  box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+}
+
+/* Link inside paragraph */
+.main-container p a {
+  color: #009688;
+  text-decoration: none;
+}
+.main-container p a:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav>
+  <h1>🍔 Foodly</h1>
+  <ul>
+    <li><a href="index.html">Home</a></li>
+    <li><a href="restaurants.html">Restaurants</a></li>
+    <li><a href="vouchers.html">Vouchers</a></li>
+    <li><a href="contact.html">Contact</a></li>
+    <li class="dropdown">
+      <a href="#">Account ▾</a>
+      <div class="dropdown-content">
+        <a href="account.html">Profile</a>
+        <a href="order-history.html">Order History</a>
+        <a href="#" id="logoutBtn">Logout</a>
+      </div>
+    </li>
+  </ul>
+</nav>
+
+<!-- Header -->
+<header>
+  <h2>👤 My Account</h2>
+  <p>Login to manage your orders and account.</p>
+</header>
+
+<!-- Main Login Form -->
+<main class="main-container">
+  <h3>Login</h3>
+  <form id="loginForm">
+    <input type="email" id="email" placeholder="Email" required>
+    <input type="password" id="password" placeholder="Password" required>
+    <button type="submit">Login</button>
+    <p style="margin-top:15px;">Don’t have an account? <a href="#">Sign up</a></p>
+  </form>
+</main>
+
+<!-- Footer -->
+<footer>© 2025 GrabFood Cloud — Powered by Netlify</footer>
+
+<script>
+// JS for login functionality
+document.getElementById('loginForm').addEventListener('submit', function(e) {
+  e.preventDefault(); // Prevent form reload
+  const email = document.getElementById('email').value;
+  const password = document.getElementById('password').value;
+
+  if (!email || !password) {
+    alert("Please enter both email and password!");
+    return;
+  }
+
+  alert(`Logged in as ${email}`);
+  // Here you can add real authentication logic
+});
+</script>
+</body>
+</html>
